@@ -1,5 +1,5 @@
 # Pluralinput.Sdk
-
+This is complete rewrite of the previous, non-open Pluralinput SDK.
 ## Code samples
 
 ### Basic usage
@@ -20,3 +20,12 @@ mice.First().ButtonUp += (o, e) =>
     Console.WriteLine($"{o}: ButtonDown {e.Button}");
 };
 ```
+
+## TODO
+- [ ] add package to nuget.org
+- [ ] check x64/x86 compatibility issues
+- [ ] check .NET Core compatibility
+- [ ] add Unity sample project
+- [ ] add WinForms sample project
+- [ ] add WPF sample project
+- [ ] add UWP sample project
