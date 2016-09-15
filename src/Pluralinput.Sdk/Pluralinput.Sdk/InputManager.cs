@@ -21,7 +21,7 @@ namespace Pluralinput.Sdk
         protected WindowCreator WindowCreator { get; set; }
         protected RawInputParser RawInputParser { get; set; }
 
-        protected virtual void Initialize()
+        protected void Initialize()
         {
             RawInputParser = new RawInputParser();
             WindowCreator = new WindowCreator(RawInputParser);
@@ -32,7 +32,7 @@ namespace Pluralinput.Sdk
             RegisterInputDevices(windowHandle);
         }
 
-        protected virtual void RegisterInputDevices(IntPtr targetWindowHandle)
+        protected void RegisterInputDevices(IntPtr targetWindowHandle)
         {
             var flags = RIDEV_INPUTSINK;
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Pluralinput.Sdk
 {
-    public class MouseButtonInputEventArgs
+    public class MouseButtonInputEventArgs : EventArgs
     {
         public MouseButtonInputEventArgs(VirtualKeys button)
         {

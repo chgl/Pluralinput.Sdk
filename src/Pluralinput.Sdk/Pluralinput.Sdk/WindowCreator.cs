@@ -57,10 +57,10 @@ namespace Pluralinput.Sdk
             windowClassEx.cbClsExtra = 0;
             windowClassEx.cbWndExtra = 0;
             windowClassEx.hInstance = IntPtr.Zero; //instanceHandle.DangerousGetHandle();
-            windowClassEx.hIcon = LoadIcon(IntPtr.Zero, new IntPtr((int)SystemIcons.IDI_APPLICATION));
-            windowClassEx.hIconSm = LoadIcon(IntPtr.Zero, new IntPtr((int)SystemIcons.IDI_APPLICATION));
-            windowClassEx.hCursor = LoadCursor(IntPtr.Zero, (int)IdcStandardCursors.IDC_ARROW);
-            windowClassEx.hbrBackground = GetStockObject(StockObjects.WHITE_BRUSH);
+            windowClassEx.hIcon = IntPtr.Zero; //LoadIcon(IntPtr.Zero, new IntPtr((int)SystemIcons.IDI_APPLICATION));
+            windowClassEx.hIconSm = IntPtr.Zero; //LoadIcon(IntPtr.Zero, new IntPtr((int)SystemIcons.IDI_APPLICATION));
+            windowClassEx.hCursor = IntPtr.Zero; //LoadCursor(IntPtr.Zero, (int)IdcStandardCursors.IDC_ARROW);
+            windowClassEx.hbrBackground = IntPtr.Zero; //GetStockObject(StockObjects.WHITE_BRUSH);
             windowClassEx.lpszMenuName = null;
             windowClassEx.lpszClassName = windowClassName;
 

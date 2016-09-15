@@ -7,7 +7,7 @@ using static Pluralinput.Sdk.NativeStructs;
 
 namespace Pluralinput.Sdk
 {
-    public class RawMouseInputEventArgs
+    public class RawMouseInputEventArgs : EventArgs
     {
         public RawMouseInputEventArgs(RAWINPUTHEADER header, RAWMOUSE data)
         {

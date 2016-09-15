@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Pluralinput.Sdk
 {
-    public class MouseMoveInputEventArgs
+    public class MouseMoveInputEventArgs : EventArgs
     {
         public MouseMoveInputEventArgs(int lastX, int lastY)
         {

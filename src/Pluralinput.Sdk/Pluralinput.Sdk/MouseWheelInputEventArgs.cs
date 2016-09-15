@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Pluralinput.Sdk
 {
-    public class MouseWheelInputEventArgs
+    public class MouseWheelInputEventArgs : EventArgs
     {
         public MouseWheelInputEventArgs(int wheelDelta)
         {

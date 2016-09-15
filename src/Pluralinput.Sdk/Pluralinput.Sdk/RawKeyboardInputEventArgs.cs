@@ -7,7 +7,7 @@ using static Pluralinput.Sdk.NativeStructs;
 
 namespace Pluralinput.Sdk
 {
-    public class RawKeyboardInputEventArgs
+    public class RawKeyboardInputEventArgs : EventArgs
     {
         public RawKeyboardInputEventArgs(RAWINPUTHEADER header, RAWKEYBOARD data)
         {

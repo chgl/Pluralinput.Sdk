@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Pluralinput.Sdk
 {
-    public class KeyInputEventArgs
+    public class KeyInputEventArgs : EventArgs
     {
         public KeyInputEventArgs(VirtualKeys key)
         {
