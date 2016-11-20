@@ -26,7 +26,7 @@ namespace Pluralinput.Sdk
         private void InputSource_InputAvailable(object sender, RawMouseInputEventArgs e)
         {
             // only evaluate this event if it is actually intended for this device
-            //TODO: add some sort of conditional event invocation before this
+            // TODO: implement smarter input dispatching
             if (e.Header.hDevice != DeviceHandle)
                 return;
 
