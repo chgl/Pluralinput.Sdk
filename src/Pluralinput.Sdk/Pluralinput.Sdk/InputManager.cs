@@ -54,7 +54,7 @@ namespace Pluralinput.Sdk
                 }
             };
 
-            if (!RegisterRawInputDevices(devices, devices.Length, Marshal.SizeOf<RAWINPUTDEVICE>()))
+            if (!RegisterRawInputDevices(devices, devices.Length, Marshal.SizeOf(typeof(RAWINPUTDEVICE))))
             {
                 throw new Win32Exception();
             }

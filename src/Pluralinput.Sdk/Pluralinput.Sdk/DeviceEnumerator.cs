@@ -34,7 +34,7 @@ namespace Pluralinput.Sdk
         private IEnumerable<RAWINPUTDEVICELIST> GetRawInputDevices(uint type)
         {
             uint deviceCount = 0;
-            uint dwSize = (uint)Marshal.SizeOf<RAWINPUTDEVICELIST>();
+            uint dwSize = (uint)Marshal.SizeOf(typeof(RAWINPUTDEVICELIST));
 
             uint retValue = GetRawInputDeviceList(null, ref deviceCount, dwSize);
 

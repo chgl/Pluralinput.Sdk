@@ -51,7 +51,7 @@ namespace Pluralinput.Sdk
             //SafeHandle instanceHandle = Process.GetCurrentProcess().SafeHandle;
             string windowClassName = "PluralinputSDKHiddenWindowClass";
 
-            windowClassEx.cbSize = (uint)Marshal.SizeOf<WNDCLASSEX>();
+            windowClassEx.cbSize = (uint)Marshal.SizeOf(typeof(WNDCLASSEX));
             windowClassEx.style = 0;
             windowClassEx.lpfnWndProc = new WndProc(WndProcDelegate);
             windowClassEx.cbClsExtra = 0;

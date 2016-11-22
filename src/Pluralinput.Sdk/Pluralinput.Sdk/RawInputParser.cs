@@ -23,7 +23,7 @@ namespace Pluralinput.Sdk
         public void Parse(IntPtr hWnd, IntPtr wParam, IntPtr lParam)
         {
             uint dwSize = 0;
-            uint cbSizeHeader = (uint)Marshal.SizeOf<RAWINPUTHEADER>();
+            uint cbSizeHeader = (uint)Marshal.SizeOf(typeof(RAWINPUTHEADER));
 
             if (GetRawInputData(lParam,
                                 RID_INPUT,
@@ -45,7 +45,7 @@ namespace Pluralinput.Sdk
                 throw new Win32Exception();
             }
 
-            var ri = Marshal.PtrToStructure<RAWINPUT>(idata_buffer);
+            var ri = (RAWINPUT)Marshal.PtrToStructure(idata_buffer, typeof(RAWINPUT));
 
             Marshal.FreeHGlobal(idata_buffer);
 

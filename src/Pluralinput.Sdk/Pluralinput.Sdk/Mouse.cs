@@ -65,7 +65,7 @@ namespace Pluralinput.Sdk
                 ButtonUp?.Invoke(this, new MouseButtonInputEventArgs(VirtualKeys.MiddleButton));
             }
 
-            //TODO: wheel and XBUTTON aren't possible at the same time
+            // wheel and XBUTTON aren't possible at the same time
             if ((e.Data.ButtonFlags & RI_MOUSE_BUTTON_4_DOWN) == RI_MOUSE_BUTTON_4_DOWN)
             {
                 ButtonDown?.Invoke(this, new MouseButtonInputEventArgs(VirtualKeys.ExtraButton1));
