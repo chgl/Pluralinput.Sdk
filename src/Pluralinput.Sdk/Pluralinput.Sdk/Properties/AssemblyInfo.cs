@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Pluralinput.Sdk")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Pluralinput SDK")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Christian Gulden")]
 [assembly: AssemblyProduct("Pluralinput.Sdk")]
 [assembly: AssemblyCopyright("Copyright © Christian Gulden 2016")]
 [assembly: AssemblyTrademark("")]

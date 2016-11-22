@@ -4,11 +4,11 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using static Pluralinput.Sdk.NativeFlags;
 using static Pluralinput.Sdk.NativeStructs;
 using static Pluralinput.Sdk.NativeMethods;
 using static Pluralinput.Sdk.NativeConst;
+using System.Threading;
 
 namespace Pluralinput.Sdk
 {
@@ -94,7 +94,7 @@ namespace Pluralinput.Sdk
             //ShowWindow(hwnd, (int)ShowWindowCommands.Hide);
             UpdateWindow(hwnd);
 
-            Task.Run(() =>
+            var ts = new ThreadStart(() =>
             {
                 MSG msg;
                 while (GetMessage(out msg, IntPtr.Zero, 0, 0) != 0)
@@ -103,6 +103,7 @@ namespace Pluralinput.Sdk
                     DispatchMessage(ref msg);
                 }
             });
+            new Thread(ts).Start();
 
             windowHandle = hwnd;
 

@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 using static Pluralinput.Sdk.NativeStructs;
 using static Pluralinput.Sdk.NativeMethods;
 using static Pluralinput.Sdk.NativeConst;

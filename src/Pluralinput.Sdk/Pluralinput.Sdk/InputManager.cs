@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using static Pluralinput.Sdk.NativeStructs;
 using static Pluralinput.Sdk.NativeMethods;
 using static Pluralinput.Sdk.NativeConst;
