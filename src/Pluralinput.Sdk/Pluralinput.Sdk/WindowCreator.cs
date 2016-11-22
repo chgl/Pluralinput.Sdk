@@ -16,13 +16,15 @@ namespace Pluralinput.Sdk
     {
         private bool isDisposed = false;
         private static WndProc WndProcDelegate;
-        private WNDCLASSEX windowClassEx = new WNDCLASSEX();
         private IntPtr windowHandle = IntPtr.Zero;
+        private string windowClassName = "PluralinputSDKHiddenWindowClass-";
 
         public WindowCreator(RawInputParser rawInputParser)
         {
             RawInputParser = rawInputParser;
             WndProcDelegate = WndProc;
+
+            windowClassName += Guid.NewGuid().ToString();
         }
 
         private RawInputParser RawInputParser { get; set; }
@@ -41,30 +43,30 @@ namespace Pluralinput.Sdk
 
             return DefWindowProc(hwnd, (WM)message, wParam, lParam);
         }
-        
+
         public IntPtr CreateWindow()
         {
             //TODO: possible race condition if CreateWindow is called from multiple threads.
             if (windowHandle != IntPtr.Zero)
                 throw new InvalidOperationException("Only a single call to CreateWindow is allowed per WindowCreator instance.");
 
-            //SafeHandle instanceHandle = Process.GetCurrentProcess().SafeHandle;
-            string windowClassName = "PluralinputSDKHiddenWindowClass";
+            // ideally, the HINSTANCE of this dll should be used, not the host application's.
+            // we mitigate potential window class name collisions by 'randomizing' the name in the constructor.
+            IntPtr instanceHandle = Process.GetCurrentProcess().Handle;
+            
+            WNDCLASS windowClass = new WNDCLASS();
+            windowClass.style = 0;
+            windowClass.lpfnWndProc = new WndProc(WndProcDelegate);
+            windowClass.cbClsExtra = 0;
+            windowClass.cbWndExtra = 0;
+            windowClass.hInstance = instanceHandle;
+            windowClass.hIcon = IntPtr.Zero; //LoadIcon(IntPtr.Zero, new IntPtr((int)SystemIcons.IDI_APPLICATION));
+            windowClass.hCursor = IntPtr.Zero; //LoadCursor(IntPtr.Zero, (int)IdcStandardCursors.IDC_ARROW);
+            windowClass.hbrBackground = IntPtr.Zero; //GetStockObject(StockObjects.WHITE_BRUSH);
+            windowClass.lpszMenuName = null;
+            windowClass.lpszClassName = windowClassName;
 
-            windowClassEx.cbSize = (uint)Marshal.SizeOf(typeof(WNDCLASSEX));
-            windowClassEx.style = 0;
-            windowClassEx.lpfnWndProc = new WndProc(WndProcDelegate);
-            windowClassEx.cbClsExtra = 0;
-            windowClassEx.cbWndExtra = 0;
-            windowClassEx.hInstance = IntPtr.Zero; //instanceHandle.DangerousGetHandle();
-            windowClassEx.hIcon = IntPtr.Zero; //LoadIcon(IntPtr.Zero, new IntPtr((int)SystemIcons.IDI_APPLICATION));
-            windowClassEx.hIconSm = IntPtr.Zero; //LoadIcon(IntPtr.Zero, new IntPtr((int)SystemIcons.IDI_APPLICATION));
-            windowClassEx.hCursor = IntPtr.Zero; //LoadCursor(IntPtr.Zero, (int)IdcStandardCursors.IDC_ARROW);
-            windowClassEx.hbrBackground = IntPtr.Zero; //GetStockObject(StockObjects.WHITE_BRUSH);
-            windowClassEx.lpszMenuName = null;
-            windowClassEx.lpszClassName = windowClassName;
-
-            short regResult = RegisterClassEx(ref windowClassEx);
+            ushort regResult = RegisterClass(ref windowClass);
 
             if (regResult == 0)
             {
@@ -73,8 +75,8 @@ namespace Pluralinput.Sdk
 
             var hwnd = CreateWindowEx(
                 WindowStylesEx.WS_EX_NOACTIVATE | WindowStylesEx.WS_EX_TRANSPARENT,
-                windowClassName,
-                "Pluralinput.Sdk Window (You really shouldn't see this...)",
+                new IntPtr((int)(uint)regResult),
+                "Pluralinput.Sdk Window",
                 WindowStyles.WS_DISABLED,
                 CW_USEDEFAULT,
                 CW_USEDEFAULT,
@@ -82,7 +84,7 @@ namespace Pluralinput.Sdk
                 CW_USEDEFAULT,
                 IntPtr.Zero,
                 IntPtr.Zero,
-                IntPtr.Zero,//instanceHandle.DangerousGetHandle(),
+                instanceHandle,
                 IntPtr.Zero);
 
             if (hwnd == IntPtr.Zero)
@@ -124,7 +126,7 @@ namespace Pluralinput.Sdk
                 {
                     // dispose managed resources
                 }
-                
+
                 if (windowHandle != IntPtr.Zero)
                 {
                     DestroyWindow(windowHandle);

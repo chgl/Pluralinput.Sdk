@@ -38,7 +38,7 @@ namespace Pluralinput.Sdk
 
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         internal static extern IntPtr CreateWindowEx(WindowStylesEx dwExStyle,
-                                                   string lpClassName,
+                                                   IntPtr lpClassName,
                                                    string lpWindowName,
                                                    WindowStyles dwStyle,
                                                    int x,
@@ -77,6 +77,9 @@ namespace Pluralinput.Sdk
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         [return: MarshalAs(UnmanagedType.U2)]
         internal static extern short RegisterClassEx([In] ref WNDCLASSEX lpwcx);
+
+        [DllImport("user32.dll")]
+        internal static extern ushort RegisterClass([In] ref WNDCLASS lpWndClass);
 
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         internal static extern bool DestroyWindow(IntPtr hWnd);
