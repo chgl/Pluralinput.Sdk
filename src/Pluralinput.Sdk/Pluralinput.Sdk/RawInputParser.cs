@@ -53,12 +53,12 @@ namespace Pluralinput.Sdk
             {
                 case RIM_TYPEKEYBOARD:
                     {
-                        ProcessRawKeyboardInput(ri.keyboard, ri.header);
+                        ProcessRawKeyboardInput(ri.data.keyboard, ri.header);
                         break;
                     }
                 case RIM_TYPEMOUSE:
                     {
-                        ProcessRawMouseInput(ri.mouse, ri.header);
+                        ProcessRawMouseInput(ri.data.mouse, ri.header);
                         break;
                     }
             }

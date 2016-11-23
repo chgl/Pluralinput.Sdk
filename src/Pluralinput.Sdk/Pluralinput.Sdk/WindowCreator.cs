@@ -50,54 +50,59 @@ namespace Pluralinput.Sdk
             if (windowHandle != IntPtr.Zero)
                 throw new InvalidOperationException("Only a single call to CreateWindow is allowed per WindowCreator instance.");
 
-            // ideally, the HINSTANCE of this dll should be used, not the host application's.
-            // we mitigate potential window class name collisions by 'randomizing' the name in the constructor.
-            IntPtr instanceHandle = Process.GetCurrentProcess().Handle;
-            
-            WNDCLASS windowClass = new WNDCLASS();
-            windowClass.style = 0;
-            windowClass.lpfnWndProc = new WndProc(WndProcDelegate);
-            windowClass.cbClsExtra = 0;
-            windowClass.cbWndExtra = 0;
-            windowClass.hInstance = instanceHandle;
-            windowClass.hIcon = IntPtr.Zero; //LoadIcon(IntPtr.Zero, new IntPtr((int)SystemIcons.IDI_APPLICATION));
-            windowClass.hCursor = IntPtr.Zero; //LoadCursor(IntPtr.Zero, (int)IdcStandardCursors.IDC_ARROW);
-            windowClass.hbrBackground = IntPtr.Zero; //GetStockObject(StockObjects.WHITE_BRUSH);
-            windowClass.lpszMenuName = null;
-            windowClass.lpszClassName = windowClassName;
+            var windowCreatedEvent = new ManualResetEvent(false);
 
-            ushort regResult = RegisterClass(ref windowClass);
-
-            if (regResult == 0)
+            var windowThreadStart = new ThreadStart(() =>
             {
-                throw new Win32Exception();
-            }
+                // ideally, the HINSTANCE of this dll should be used, not the host application's.
+                // we mitigate potential window class name collisions by 'randomizing' the name in the constructor.
+                IntPtr instanceHandle = Process.GetCurrentProcess().Handle;
 
-            var hwnd = CreateWindowEx(
-                WindowStylesEx.WS_EX_NOACTIVATE | WindowStylesEx.WS_EX_TRANSPARENT,
-                new IntPtr((int)(uint)regResult),
-                "Pluralinput.Sdk Window",
-                WindowStyles.WS_DISABLED,
-                CW_USEDEFAULT,
-                CW_USEDEFAULT,
-                CW_USEDEFAULT,
-                CW_USEDEFAULT,
-                IntPtr.Zero,
-                IntPtr.Zero,
-                instanceHandle,
-                IntPtr.Zero);
+                WNDCLASS windowClass = new WNDCLASS();
+                windowClass.style = 0;
+                windowClass.lpfnWndProc = new WndProc(WndProcDelegate);
+                windowClass.cbClsExtra = 0;
+                windowClass.cbWndExtra = 0;
+                windowClass.hInstance = instanceHandle;
+                windowClass.hIcon = IntPtr.Zero; //LoadIcon(IntPtr.Zero, new IntPtr((int)SystemIcons.IDI_APPLICATION));
+                windowClass.hCursor = IntPtr.Zero; //LoadCursor(IntPtr.Zero, (int)IdcStandardCursors.IDC_ARROW);
+                windowClass.hbrBackground = IntPtr.Zero; //GetStockObject(StockObjects.WHITE_BRUSH);
+                windowClass.lpszMenuName = null;
+                windowClass.lpszClassName = windowClassName;
 
-            if (hwnd == IntPtr.Zero)
-            {
-                throw new Win32Exception();
-            }
+                ushort regResult = RegisterClass(ref windowClass);
 
-            // no need to show a hidden window.
-            //ShowWindow(hwnd, (int)ShowWindowCommands.Hide);
-            UpdateWindow(hwnd);
+                if (regResult == 0)
+                {
+                    throw new Win32Exception();
+                }
 
-            var ts = new ThreadStart(() =>
-            {
+                var hwnd = CreateWindowEx(
+                    WindowStylesEx.WS_EX_NOACTIVATE | WindowStylesEx.WS_EX_TRANSPARENT,
+                    new IntPtr((int)(uint)regResult),
+                    "Pluralinput.Sdk Window",
+                    WindowStyles.WS_DISABLED,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    IntPtr.Zero,
+                    IntPtr.Zero,
+                    instanceHandle,
+                    IntPtr.Zero);
+
+                if (hwnd == IntPtr.Zero)
+                {
+                    throw new Win32Exception();
+                }
+
+                windowHandle = hwnd;
+                windowCreatedEvent.Set();
+
+                // no need to show a hidden window.
+                //ShowWindow(hwnd, (int)ShowWindowCommands.Hide);
+                UpdateWindow(hwnd);
+
                 MSG msg;
                 while (GetMessage(out msg, IntPtr.Zero, 0, 0) != 0)
                 {
@@ -105,11 +110,17 @@ namespace Pluralinput.Sdk
                     DispatchMessage(ref msg);
                 }
             });
-            new Thread(ts).Start();
 
-            windowHandle = hwnd;
+            var windowThread = new Thread(windowThreadStart)
+            {
+                Name = "PluralinputSDKBackgroundWindowThread"
+            };
 
-            return hwnd;
+            windowThread.Start();
+
+            windowCreatedEvent.WaitOne();
+            
+            return windowHandle;
         }
 
         public void Dispose()
@@ -127,7 +138,7 @@ namespace Pluralinput.Sdk
                     // dispose managed resources
                 }
 
-                if (windowHandle != IntPtr.Zero)
+                if (windowHandle != null && windowHandle != IntPtr.Zero)
                 {
                     DestroyWindow(windowHandle);
                     windowHandle = IntPtr.Zero;

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using static Pluralinput.Sdk.NativeFlags;
 
@@ -32,97 +30,62 @@ namespace Pluralinput.Sdk
             internal int dwType;
         }
 
-        [StructLayout(LayoutKind.Explicit)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct RAWINPUT
         {
-            [FieldOffset(0)]
             public RAWINPUTHEADER header;
+            public RAWINPUTDATA data;
 
-            [FieldOffset(16 + 8)]
-            public RAWMOUSE mouse;
+            [StructLayout(LayoutKind.Explicit)]
+            public struct RAWINPUTDATA
+            {
+                [FieldOffset(0)]
+                public RAWMOUSE mouse;
 
-            [FieldOffset(16 + 8)]
-            public RAWKEYBOARD keyboard;
+                [FieldOffset(0)]
+                public RAWKEYBOARD keyboard;
 
-            [FieldOffset(16 + 8)]
-            public RAWHID hid;
+                [FieldOffset(0)]
+                public RAWHID hid;
+            }
         }
 
         [StructLayout(LayoutKind.Sequential)]
         public struct RAWINPUTHEADER
         {
-            /// <summary>Type of device the input is coming from.</summary>
             public int dwType;
-            /// <summary>Size of the packet of data.</summary>
             public int dwSize;
-            /// <summary>Handle to the device sending the data.</summary>
             public IntPtr hDevice;
-            /// <summary>wParam from the window message.</summary>
             public IntPtr wParam;
         }
-
-        /// <summary>
-        /// Contains information about the state of the mouse.
-        /// </summary>
+        
         [StructLayout(LayoutKind.Explicit)]
         public struct RAWMOUSE
         {
-            /// <summary>
-            /// The mouse state.
-            /// </summary>
             [FieldOffset(0)]
             public ushort Flags;
-            /// <summary>
-            /// Flags for the event.
-            /// </summary>
             [FieldOffset(4)]
             public ushort ButtonFlags;
-            /// <summary>
-            /// If the mouse wheel is moved, this will contain the delta amount.
-            /// </summary>
             [FieldOffset(6)]
             public ushort ButtonData;
-            /// <summary>
-            /// Raw button data.
-            /// </summary>
             [FieldOffset(8)]
             public uint RawButtons;
-            /// <summary>
-            /// The motion in the X direction. This is signed relative motion or 
-            /// absolute motion, depending on the value of usFlags. 
-            /// </summary>
             [FieldOffset(12)]
             public int LastX;
-            /// <summary>
-            /// The motion in the Y direction. This is signed relative motion or absolute motion, 
-            /// depending on the value of usFlags. 
-            /// </summary>
             [FieldOffset(16)]
             public int LastY;
-            /// <summary>
-            /// The device-specific additional information for the event. 
-            /// </summary>
             [FieldOffset(20)]
             public uint ExtraInformation;
         }
-
-        /// <summary>
-        /// Value type for raw input from a keyboard.
-        /// </summary>    
+   
         [StructLayout(LayoutKind.Sequential)]
         public struct RAWKEYBOARD
         {
-            /// <summary>Scan code for key depression.</summary>
             public ushort MakeCode;
-            /// <summary>Scan code information.</summary>
             public ushort Flags;
-            /// <summary>Reserved.</summary>
             public short Reserved;
-            /// <summary>Virtual key code.</summary>
             public ushort VirtualKey;
-            /// <summary>Corresponding window message.</summary>
             public uint Message;
-            /// <summary>Extra information.</summary>
             public int ExtraInformation;
         }
 
