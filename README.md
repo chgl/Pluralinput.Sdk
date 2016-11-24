@@ -22,9 +22,9 @@ mice.First().ButtonUp += (o, e) =>
 
 ## TODO
 - [ ] add package to nuget.org
-- [ ] check x64/x86 compatibility issues
+- [x] check x64/x86 compatibility issues
 - [ ] check .NET Core compatibility
-- [ ] add Unity sample project
+- [x] add Unity sample project
 - [ ] add WinForms sample project
 - [ ] add WPF sample project
 - [ ] add UWP sample project
