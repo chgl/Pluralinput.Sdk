@@ -16,7 +16,7 @@ var mice = im.DeviceEnumerator.EnumerateMice();
 // listen to the first mouse's button up event
 mice.First().ButtonUp += (o, e) =>
 {
-    Console.WriteLine($"{o}: ButtonDown {e.Button}");
+    Console.WriteLine($"{o}: ButtonUp {e.Button}");
 };
 ```
 
